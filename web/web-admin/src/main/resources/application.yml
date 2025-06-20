@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: rq_admin
+  datasource:
+    url: jdbc:mysql://localhost:3306/rq_admin
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# springdoc-openapi项目配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  default-flat-param-object: true
+
+# knife4j的增强配置
+knife4j:
+  enable: true
+  enable-group: false
+  setting:
+    language: zh_cn
+    enable-swagger-models: true
+    enable-document-manage: true
+    swagger-model-name: 实体类列表
+    enable-version: false
+    enable-reload-cache-parameter: false
+    enable-after-script: true
+    enable-filter-multipart-api-method-type: POST
+    enable-filter-multipart-apis: false
+    enable-request-cache: true
+    enable-host: false
+    enable-search: true
+    enable-debug: true
+    enable-open-api: true
+  cors: true
+  production: false
+  basic:
+    enable: false
