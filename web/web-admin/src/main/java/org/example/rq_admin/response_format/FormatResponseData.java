@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.enums.ResponseStatus;
+import org.example.rq_admin.calendar.CalendarEvent;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +32,12 @@ public class FormatResponseData {
     public FormatResponseData(ResponseStatus status, String message, Object data) {
         this.code = status.getCode();
         this.message = message;
+        this.data = data;
+    }
+
+    public FormatResponseData(ResponseStatus status, Object data) {
+        this.code = status.getCode();
+        this.message = status.getMessage();
         this.data = data;
     }
 }

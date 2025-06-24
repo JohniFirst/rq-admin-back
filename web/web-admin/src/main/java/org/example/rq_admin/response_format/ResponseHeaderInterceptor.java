@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class ResponseHeaderInterceptor implements HandlerInterceptor {
-    @Override
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -16,6 +15,5 @@ public class ResponseHeaderInterceptor implements HandlerInterceptor {
         response.setDateHeader("Expires", 0);
         return true;
     }
-
 }
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket test</title>
+</head>
+<body>
+
+    <script>
+        window.onload = () => {
+            const ws = new WebSocket("ws://localhost:8080/websocket-test")
+
+            ws.onopen = () => {
+                console.log('websocket 连接成功')
+            }
+
+            ws.onmessage = (msg) => {
+                console.log('websocket收到了消息', msg)
+            }
+        }
+    </script>
+</body>
+</html>

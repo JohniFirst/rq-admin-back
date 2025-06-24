@@ -49,10 +49,19 @@ public class CalendarEventService {
         YearMonth ym = YearMonth.of(year, month);
         LocalDateTime start = ym.atDay(1).atStartOfDay();
         LocalDateTime end = ym.atEndOfMonth().atTime(23, 59, 59);
+
+        return getCalendarEvents(start, end, event);
+    }
+
+    public List<CalendarEvent> findByRange(LocalDateTime startTime, LocalDateTime endTime, String event) {
+        return getCalendarEvents(startTime, endTime, event);
+    }
+
+    private List<CalendarEvent> getCalendarEvents(LocalDateTime startTime, LocalDateTime endTime, String event) {
         Specification<CalendarEvent> spec = (root, query, cb) -> {
             var predicates = new java.util.ArrayList<Predicate>();
-            predicates.add(cb.greaterThanOrEqualTo(root.get("start"), start));
-            predicates.add(cb.lessThanOrEqualTo(root.get("end"), end));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("start"), startTime));
+            predicates.add(cb.lessThanOrEqualTo(root.get("end"), endTime));
             if (event != null && !event.isEmpty()) {
                 predicates.add(cb.like(cb.function("json_extract", String.class, root.get("event"), cb.literal("$")), "%" + event + "%"));
             }
