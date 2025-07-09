@@ -11,13 +11,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FormatResponseData {
+public class FormatResponseData<T> {
     // 请求是否成功
     private int code;
     // 响应提示信息
     private String message;
     // 响应数据
-    private Object data;
+    private T data;
 
     public FormatResponseData(ResponseStatus status) {
         this.code = status.getCode();
@@ -29,13 +29,13 @@ public class FormatResponseData {
         this.message = message;
     }
 
-    public FormatResponseData(ResponseStatus status, String message, Object data) {
+    public FormatResponseData(ResponseStatus status, String message, T data) {
         this.code = status.getCode();
         this.message = message;
         this.data = data;
     }
 
-    public FormatResponseData(ResponseStatus status, Object data) {
+    public FormatResponseData(ResponseStatus status, T data) {
         this.code = status.getCode();
         this.message = status.getMessage();
         this.data = data;

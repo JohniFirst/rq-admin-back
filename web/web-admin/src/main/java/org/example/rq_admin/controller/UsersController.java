@@ -49,12 +49,12 @@ public class UsersController {
         if (usersService.checkUserExists(user.getUsername())) {
             return new FormatResponseData(ResponseStatus.FAILURE, "用户名已存在");
         }
-        usersService.saveUsers(user.getUsername(), user.getPassword());
+        usersService.saveUsers(user);
         return new FormatResponseData(ResponseStatus.SUCCESS, "注册成功");
     }
 
     @Operation(summary = "审批用户", description = "审批用户并分配角色")
-    @PutMapping("/{userId}/approve")
+    @PutMapping("/user/{userId}/approve")
     public FormatResponseData approveUser(
             @Parameter(description = "用户ID") @PathVariable Long userId,
             @Parameter(description = "角色ID列表") @RequestBody List<Long> roleIds
@@ -64,17 +64,18 @@ public class UsersController {
     }
 
     @Operation(summary = "获取用户列表", description = "分页获取所有用户")
-    @PostMapping("/list")
-    public Page<Users> getAllUsers(
-            @Parameter(description = "查询条件") @RequestBody(required = false) Users user,
+    @PostMapping("/user/list")
+    public FormatResponseData<Page<Users>> getAllUsers(
             @Parameter(description = "页码") @RequestParam(defaultValue = "0") Integer pageNumber,
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize
     ) {
-        return usersService.getAllUser(pageNumber, pageSize);
+        Page<Users> users = usersService.getAllUser(pageNumber, pageSize);
+
+        return new FormatResponseData<>(ResponseStatus.SUCCESS, users);
     }
 
     @Operation(summary = "更新用户状态", description = "启用或禁用用户")
-    @PutMapping("/update")
+    @PutMapping("/user/update")
     public FormatResponseData updateUserIsEnabled(@Valid @RequestBody Users user) {
         return usersService.updateUserIsEnabled(user.getId(), user.getIsEnabled());
     }

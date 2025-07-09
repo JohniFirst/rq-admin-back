@@ -35,6 +35,8 @@ public class Users {
     private BigInteger roleId;
     // 部门id
     private BigInteger departmentId;
+    // 创建时间
+    private String createdAt;
 
     private boolean auditStatus;
 

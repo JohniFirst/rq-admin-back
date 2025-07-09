@@ -27,13 +27,9 @@ public class UsersService {
     }
 
     /**
-     * 保存用户到数据库，注册的时候提供用户名密码即可
-     *
-     * @param username 用户名
-     * @param password 密码
+     * 保存用户到数据库
      */
-    public void saveUsers(String username, String password) {
-        Users user = new Users(username, password);
+    public void saveUsers(Users user) {
         usersRepository.save(user);
     }
 
