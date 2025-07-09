@@ -152,7 +152,7 @@
 	</div>
 
 	<script>
-		const API_BASE = '/api/file';
+		const API_BASE = '/file';
 
 		// 单文件上传
 		async function uploadSingleFile() {
@@ -245,7 +245,8 @@
                             <small>ID: ${file.id} | 大小: ${formatFileSize(file.fileSize)} | 类型: ${file.fileType}</small><br>
                             <small>上传时间: ${file.uploadTime} | 状态: ${file.isEnabled}</small><br>
                             <button class="btn btn-danger" onclick="deleteFile(${file.id})">删除</button>
-                            <button class="btn" onclick="downloadFile('${file.filePath}')">下载</button>
+                            <a href="/api/file/download/${file.id}" download="${file.originalFilename}">下载 ${file.originalFilename}</a>
+                        	                            <button class="btn" onclick="downloadFile(${file.id})">下载</button>
                         </div>
                     `;
 				});
@@ -263,7 +264,7 @@
 			}
 
 			try {
-				const response = await fetch(`${API_BASE}/info/${fileId}`, {
+				const response = await fetch(`${API_BASE}/delete/${fileId}`, {
 					method: 'DELETE'
 				});
 				const result = await response.json();
@@ -280,9 +281,8 @@
 		}
 
 		// 下载文件
-		function downloadFile(filePath) {
-			const [dateFolder, filename] = filePath.split('/');
-			window.open(`${API_BASE}/download/${dateFolder}/${filename}`, '_blank');
+		function downloadFile(fileId) {
+			window.open(`${API_BASE}/download/${fileId}`, '_blank');
 		}
 
 		// 显示进度条

@@ -76,12 +76,21 @@
 
 ### 3. 文件下载
 
-**接口地址：** `GET /api/file/download/{dateFolder}/{filename}`
+**接口地址：** `GET /api/file/download/{fileId}`
 
 **路径参数：**
 
-- `dateFolder`: 日期文件夹（如：2024/01/15）
-- `filename`: 文件名
+- `fileId`: 文件 ID
+
+**响应：** 直接返回文件流，浏览器会自动下载文件
+
+### 3.1. 文件预览
+
+**接口地址：** `GET /api/file/preview/**`
+
+**说明：** 用于预览文件，支持包含 `/` 的文件路径，如：`/api/file/preview/2024/01/15/filename.jpg`
+
+**响应：** 返回文件内容，浏览器会直接显示（图片）或下载（其他文件类型）
 
 ### 4. 获取文件列表
 
@@ -173,14 +182,15 @@
 [1, 2, 3]
 ```
 
-### 10. 删除物理文件
+### 10. 删除文件
 
-**接口地址：** `DELETE /api/file/delete/{dateFolder}/{filename}`
+**接口地址：** `DELETE /api/file/delete/{fileId}`
 
 **路径参数：**
 
-- `dateFolder`: 日期文件夹
-- `filename`: 文件名
+- `fileId`: 文件 ID
+
+**说明：** 此接口会同时删除物理文件和数据库记录
 
 ## 配置说明
 
@@ -281,6 +291,22 @@ fetch("/api/file/upload/multiple", {
   .then((result) => {
     console.log("批量上传成功:", result);
   });
+
+// 文件下载
+function downloadFile(fileId) {
+    window.open(`/api/file/download/${fileId}`, '_blank');
+}
+
+// 文件删除
+async function deleteFile(fileId) {
+    if (confirm('确定要删除这个文件吗？')) {
+        const response = await fetch(`/api/file/delete/${fileId}`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        console.log('删除结果:', result);
+    }
+}
 ```
 
 ### Java 调用示例
