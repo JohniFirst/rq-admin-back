@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.enums.ResponseStatus;
-import org.example.rq_admin.calendar.CalendarEvent;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

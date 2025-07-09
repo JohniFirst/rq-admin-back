@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.example.enums.IsEnabled;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
@@ -80,7 +83,7 @@ public class FileUploadController {
                 fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             }
             
-            String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+            String uniqueFilename = UUID.randomUUID() + fileExtension;
             
             // 按日期创建子目录
             String dateFolder = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
@@ -165,7 +168,7 @@ public class FileUploadController {
                     fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
                 }
                 
-                String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+                String uniqueFilename = UUID.randomUUID() + fileExtension;
                 
                 // 按日期创建子目录
                 String dateFolder = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
@@ -229,14 +232,14 @@ public class FileUploadController {
         
         try {
             Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
-            if (!fileInfo.isPresent()) {
+            if (fileInfo.isEmpty()) {
                 System.err.println("文件不存在，ID: " + fileId);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
             
             Path filePath = Paths.get(uploadPath).resolve(fileInfo.get().getFilePath());
-            System.out.println("尝试下载文件: " + filePath.toString());
+            System.out.println("尝试下载文件: " + filePath);
             
             if (Files.exists(filePath) && Files.isReadable(filePath)) {
                 String originalFilename = fileInfo.get().getOriginalFilename();
@@ -252,7 +255,7 @@ public class FileUploadController {
                 Files.copy(filePath, response.getOutputStream());
                 response.getOutputStream().flush();
             } else {
-                System.err.println("文件不存在或不可读: " + filePath.toString());
+                System.err.println("文件不存在或不可读: " + filePath);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
         } catch (Exception e) {
@@ -316,57 +319,32 @@ public class FileUploadController {
         if (filePath.contains(".")) {
             extension = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
         }
-        
-        switch (extension) {
-            case ".jpg":
-            case ".jpeg":
-                return "image/jpeg";
-            case ".png":
-                return "image/png";
-            case ".gif":
-                return "image/gif";
-            case ".bmp":
-                return "image/bmp";
-            case ".webp":
-                return "image/webp";
-            case ".pdf":
-                return "application/pdf";
-            case ".txt":
-                return "text/plain";
-            case ".html":
-            case ".htm":
-                return "text/html";
-            case ".css":
-                return "text/css";
-            case ".js":
-                return "application/javascript";
-            case ".json":
-                return "application/json";
-            case ".xml":
-                return "application/xml";
-            case ".doc":
-                return "application/msword";
-            case ".docx":
-                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            case ".xls":
-                return "application/vnd.ms-excel";
-            case ".xlsx":
-                return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            case ".ppt":
-                return "application/vnd.ms-powerpoint";
-            case ".pptx":
-                return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-            case ".zip":
-                return "application/zip";
-            case ".rar":
-                return "application/x-rar-compressed";
-            case ".mp4":
-                return "video/mp4";
-            case ".mp3":
-                return "audio/mpeg";
-            default:
-                return "application/octet-stream";
-        }
+
+        return switch (extension) {
+            case ".jpg", ".jpeg" -> "image/jpeg";
+            case ".png" -> "image/png";
+            case ".gif" -> "image/gif";
+            case ".bmp" -> "image/bmp";
+            case ".webp" -> "image/webp";
+            case ".pdf" -> "application/pdf";
+            case ".txt" -> "text/plain";
+            case ".html", ".htm" -> "text/html";
+            case ".css" -> "text/css";
+            case ".js" -> "application/javascript";
+            case ".json" -> "application/json";
+            case ".xml" -> "application/xml";
+            case ".doc" -> "application/msword";
+            case ".docx" -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            case ".xls" -> "application/vnd.ms-excel";
+            case ".xlsx" -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            case ".ppt" -> "application/vnd.ms-powerpoint";
+            case ".pptx" -> "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            case ".zip" -> "application/zip";
+            case ".rar" -> "application/x-rar-compressed";
+            case ".mp4" -> "video/mp4";
+            case ".mp3" -> "audio/mpeg";
+            default -> "application/octet-stream";
+        };
     }
 
     @Operation(summary = "删除文件", description = "根据文件ID删除文件")
@@ -376,13 +354,13 @@ public class FileUploadController {
         @ApiResponse(responseCode = "500", description = "服务器内部错误")
     })
     @DeleteMapping("/delete/{fileId}")
-    public FormatResponseData deleteFile(
+    public FormatResponseData<ObjectUtils.Null> deleteFile(
             @Parameter(description = "文件ID") @PathVariable Long fileId) {
         
         try {
             Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
-            if (!fileInfo.isPresent()) {
-                return new FormatResponseData(ResponseStatus.FAILURE, "文件不存在");
+            if (fileInfo.isEmpty()) {
+                return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
             }
             
             // 删除物理文件
@@ -394,9 +372,9 @@ public class FileUploadController {
             // 删除数据库中的文件信息
             fileInfoService.deleteFileInfo(fileId);
             
-            return new FormatResponseData(ResponseStatus.SUCCESS, "文件删除成功");
+            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件删除成功");
         } catch (IOException e) {
-            return new FormatResponseData(ResponseStatus.FAILURE, "文件删除失败: " + e.getMessage());
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件删除失败: " + e.getMessage());
         }
     }
 
@@ -424,11 +402,7 @@ public class FileUploadController {
             @Parameter(description = "文件ID") @PathVariable Long fileId) {
         
         Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
-        if (fileInfo.isPresent()) {
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, fileInfo.get());
-        } else {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
-        }
+        return fileInfo.map(info -> new FormatResponseData<>(ResponseStatus.SUCCESS, info)).orElseGet(() -> new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在"));
     }
 
     @Operation(summary = "更新文件状态", description = "启用或禁用文件")
@@ -437,7 +411,7 @@ public class FileUploadController {
         @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @PutMapping("/status/{fileId}")
-    public FormatResponseData updateFileStatus(
+    public FormatResponseData<ObjectUtils.Null> updateFileStatus(
             @Parameter(description = "文件ID") @PathVariable Long fileId,
             @Parameter(description = "文件状态") @RequestParam IsEnabled isEnabled) {
         
@@ -450,7 +424,7 @@ public class FileUploadController {
         @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @PutMapping("/description/{fileId}")
-    public FormatResponseData updateFileDescription(
+    public FormatResponseData<ObjectUtils.Null> updateFileDescription(
             @Parameter(description = "文件ID") @PathVariable Long fileId,
             @Parameter(description = "文件描述") @RequestParam String description) {
         
@@ -463,7 +437,7 @@ public class FileUploadController {
         @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @DeleteMapping("/info/{fileId}")
-    public FormatResponseData deleteFileInfo(
+    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(
             @Parameter(description = "文件ID") @PathVariable Long fileId) {
         
         Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
@@ -481,7 +455,7 @@ public class FileUploadController {
             // 删除数据库记录
             return fileInfoService.deleteFileInfo(fileId);
         } else {
-            return new FormatResponseData(ResponseStatus.FAILURE, "文件不存在");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
         }
     }
 
@@ -491,11 +465,11 @@ public class FileUploadController {
         @ApiResponse(responseCode = "400", description = "参数错误")
     })
     @DeleteMapping("/batch")
-    public FormatResponseData batchDeleteFiles(
+    public FormatResponseData<ObjectUtils.Null> batchDeleteFiles(
             @Parameter(description = "文件ID列表") @RequestBody List<Long> fileIds) {
         
         if (fileIds == null || fileIds.isEmpty()) {
-            return new FormatResponseData(ResponseStatus.FAILURE, "请选择要删除的文件");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要删除的文件");
         }
         
         // 删除物理文件
@@ -536,70 +510,15 @@ public class FileUploadController {
     }
 
     // 文件上传响应类
+    @Setter
+    @Getter
     public static class FileUploadResponse {
-        private Long id;
+        private String id;
         private String originalFilename;
         private String filename;
         private long fileSize;
         private String fileType;
         private String filePath;
         private LocalDateTime uploadTime;
-
-        // Getters and Setters
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getOriginalFilename() {
-            return originalFilename;
-        }
-
-        public void setOriginalFilename(String originalFilename) {
-            this.originalFilename = originalFilename;
-        }
-
-        public String getFilename() {
-            return filename;
-        }
-
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
-
-        public long getFileSize() {
-            return fileSize;
-        }
-
-        public void setFileSize(long fileSize) {
-            this.fileSize = fileSize;
-        }
-
-        public String getFileType() {
-            return fileType;
-        }
-
-        public void setFileType(String fileType) {
-            this.fileType = fileType;
-        }
-
-        public String getFilePath() {
-            return filePath;
-        }
-
-        public void setFilePath(String filePath) {
-            this.filePath = filePath;
-        }
-
-        public LocalDateTime getUploadTime() {
-            return uploadTime;
-        }
-
-        public void setUploadTime(LocalDateTime uploadTime) {
-            this.uploadTime = uploadTime;
-        }
     }
 } 

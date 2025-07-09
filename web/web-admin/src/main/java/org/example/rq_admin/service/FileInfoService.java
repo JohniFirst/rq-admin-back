@@ -1,5 +1,6 @@
 package org.example.rq_admin.service;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.example.enums.IsEnabled;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
@@ -166,56 +167,56 @@ public class FileInfoService {
     /**
      * 更新文件状态
      */
-    public FormatResponseData updateFileStatus(Long fileId, IsEnabled isEnabled) {
+    public FormatResponseData<ObjectUtils.Null> updateFileStatus(Long fileId, IsEnabled isEnabled) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
             fileInfo.setIsEnabled(isEnabled);
             fileInfoRepository.save(fileInfo);
-            return new FormatResponseData(ResponseStatus.SUCCESS, "文件状态更新成功");
+            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件状态更新成功");
         } else {
-            return new FormatResponseData(ResponseStatus.FAILURE, "文件不存在");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
         }
     }
 
     /**
      * 更新文件描述
      */
-    public FormatResponseData updateFileDescription(Long fileId, String description) {
+    public FormatResponseData<ObjectUtils.Null> updateFileDescription(Long fileId, String description) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
             fileInfo.setDescription(description);
             fileInfoRepository.save(fileInfo);
-            return new FormatResponseData(ResponseStatus.SUCCESS, "文件描述更新成功");
+            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件描述更新成功");
         } else {
-            return new FormatResponseData(ResponseStatus.FAILURE, "文件不存在");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
         }
     }
 
     /**
      * 删除文件信息
      */
-    public FormatResponseData deleteFileInfo(Long fileId) {
+    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(Long fileId) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             fileInfoRepository.deleteById(fileId);
-            return new FormatResponseData(ResponseStatus.SUCCESS, "文件信息删除成功");
+            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件信息删除成功");
         } else {
-            return new FormatResponseData(ResponseStatus.FAILURE, "文件不存在");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
         }
     }
 
     /**
      * 批量删除文件信息
      */
-    public FormatResponseData deleteFileInfos(List<Long> fileIds) {
+    public FormatResponseData<ObjectUtils.Null> deleteFileInfos(List<Long> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
-            return new FormatResponseData(ResponseStatus.FAILURE, "请选择要删除的文件");
+            return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要删除的文件");
         }
         
         fileInfoRepository.deleteAllById(fileIds);
-        return new FormatResponseData(ResponseStatus.SUCCESS, "批量删除成功");
+        return new FormatResponseData<>(ResponseStatus.SUCCESS, "批量删除成功");
     }
 
     /**
