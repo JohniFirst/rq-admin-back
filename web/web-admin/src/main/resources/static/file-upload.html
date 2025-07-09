@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>文件上传测试</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #f5f5f5;
+		}
+
+		.container {
+			background: white;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			color: #333;
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.upload-section {
+			margin-bottom: 30px;
+			padding: 20px;
+			border: 2px dashed #ddd;
+			border-radius: 8px;
+			text-align: center;
+		}
+
+		.upload-section:hover {
+			border-color: #007bff;
+		}
+
+		.file-input {
+			margin: 10px 0;
+		}
+
+		.btn {
+			background-color: #007bff;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			margin: 5px;
+		}
+
+		.btn:hover {
+			background-color: #0056b3;
+		}
+
+		.btn-danger {
+			background-color: #dc3545;
+		}
+
+		.btn-danger:hover {
+			background-color: #c82333;
+		}
+
+		.result {
+			margin-top: 20px;
+			padding: 15px;
+			border-radius: 4px;
+			white-space: pre-wrap;
+		}
+
+		.success {
+			background-color: #d4edda;
+			border: 1px solid #c3e6cb;
+			color: #155724;
+		}
+
+		.error {
+			background-color: #f8d7da;
+			border: 1px solid #f5c6cb;
+			color: #721c24;
+		}
+
+		.file-list {
+			margin-top: 20px;
+		}
+
+		.file-item {
+			padding: 10px;
+			border: 1px solid #ddd;
+			margin: 5px 0;
+			border-radius: 4px;
+			background-color: #f8f9fa;
+		}
+
+		.progress {
+			width: 100%;
+			height: 20px;
+			background-color: #f0f0f0;
+			border-radius: 10px;
+			overflow: hidden;
+			margin: 10px 0;
+		}
+
+		.progress-bar {
+			height: 100%;
+			background-color: #007bff;
+			width: 0%;
+			transition: width 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>文件上传测试页面</h1>
+
+		<!-- 单文件上传 -->
+		<div class="upload-section">
+			<h3>单文件上传</h3>
+			<input type="file" id="singleFile" class="file-input">
+			<br>
+			<button class="btn" onclick="uploadSingleFile()">上传文件</button>
+			<div class="progress" id="singleProgress" style="display: none;">
+				<div class="progress-bar" id="singleProgressBar"></div>
+			</div>
+			<div id="singleResult" class="result" style="display: none;"></div>
+		</div>
+
+		<!-- 多文件上传 -->
+		<div class="upload-section">
+			<h3>多文件上传</h3>
+			<input type="file" id="multipleFiles" class="file-input" multiple>
+			<br>
+			<button class="btn" onclick="uploadMultipleFiles()">批量上传</button>
+			<div class="progress" id="multipleProgress" style="display: none;">
+				<div class="progress-bar" id="multipleProgressBar"></div>
+			</div>
+			<div id="multipleResult" class="result" style="display: none;"></div>
+		</div>
+
+		<!-- 文件管理 -->
+		<div class="upload-section">
+			<h3>文件管理</h3>
+			<button class="btn" onclick="loadFileList()">获取文件列表</button>
+			<button class="btn btn-danger" onclick="clearResults()">清空结果</button>
+			<div id="fileList" class="file-list"></div>
+		</div>
+	</div>
+
+	<script>
+		const API_BASE = '/api/file';
+
+		// 单文件上传
+		async function uploadSingleFile() {
+			const fileInput = document.getElementById('singleFile');
+			const file = fileInput.files[0];
+
+			if (!file) {
+				showResult('singleResult', '请选择文件', 'error');
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append('file', file);
+
+			showProgress('singleProgress', true);
+
+			try {
+				const response = await fetch(`${API_BASE}/upload`, {
+					method: 'POST',
+					body: formData
+				});
+
+				const result = await response.json();
+				showResult('singleResult', JSON.stringify(result, null, 2), result.code === 200 ? 'success' : 'error');
+			} catch (error) {
+				showResult('singleResult', '上传失败: ' + error.message, 'error');
+			} finally {
+				showProgress('singleProgress', false);
+			}
+		}
+
+		// 多文件上传
+		async function uploadMultipleFiles() {
+			const fileInput = document.getElementById('multipleFiles');
+			const files = fileInput.files;
+
+			if (files.length === 0) {
+				showResult('multipleResult', '请选择文件', 'error');
+				return;
+			}
+
+			const formData = new FormData();
+			for (let i = 0; i < files.length; i++) {
+				formData.append('files', files[i]);
+			}
+
+			showProgress('multipleProgress', true);
+
+			try {
+				const response = await fetch(`${API_BASE}/upload/multiple`, {
+					method: 'POST',
+					body: formData
+				});
+
+				const result = await response.json();
+				showResult('multipleResult', JSON.stringify(result, null, 2), result.code === 200 ? 'success' : 'error');
+			} catch (error) {
+				showResult('multipleResult', '上传失败: ' + error.message, 'error');
+			} finally {
+				showProgress('multipleProgress', false);
+			}
+		}
+
+		// 获取文件列表
+		async function loadFileList() {
+			try {
+				const response = await fetch(`${API_BASE}/list?pageNumber=0&pageSize=10`);
+				const result = await response.json();
+
+				if (result.code === 200) {
+					displayFileList(result.data);
+				} else {
+					showResult('fileList', '获取文件列表失败: ' + result.message, 'error');
+				}
+			} catch (error) {
+				showResult('fileList', '获取文件列表失败: ' + error.message, 'error');
+			}
+		}
+
+		// 显示文件列表
+		function displayFileList(data) {
+			const fileListDiv = document.getElementById('fileList');
+			let html = '<h4>文件列表</h4>';
+
+			if (data.content && data.content.length > 0) {
+				data.content.forEach(file => {
+					html += `
+                        <div class="file-item">
+                            <strong>${file.originalFilename}</strong><br>
+                            <small>ID: ${file.id} | 大小: ${formatFileSize(file.fileSize)} | 类型: ${file.fileType}</small><br>
+                            <small>上传时间: ${file.uploadTime} | 状态: ${file.isEnabled}</small><br>
+                            <button class="btn btn-danger" onclick="deleteFile(${file.id})">删除</button>
+                            <button class="btn" onclick="downloadFile('${file.filePath}')">下载</button>
+                        </div>
+                    `;
+				});
+			} else {
+				html += '<p>暂无文件</p>';
+			}
+
+			fileListDiv.innerHTML = html;
+		}
+
+		// 删除文件
+		async function deleteFile(fileId) {
+			if (!confirm('确定要删除这个文件吗？')) {
+				return;
+			}
+
+			try {
+				const response = await fetch(`${API_BASE}/info/${fileId}`, {
+					method: 'DELETE'
+				});
+				const result = await response.json();
+
+				if (result.code === 200) {
+					alert('删除成功');
+					loadFileList();
+				} else {
+					alert('删除失败: ' + result.message);
+				}
+			} catch (error) {
+				alert('删除失败: ' + error.message);
+			}
+		}
+
+		// 下载文件
+		function downloadFile(filePath) {
+			const [dateFolder, filename] = filePath.split('/');
+			window.open(`${API_BASE}/download/${dateFolder}/${filename}`, '_blank');
+		}
+
+		// 显示进度条
+		function showProgress(progressId, show) {
+			const progress = document.getElementById(progressId);
+			const progressBar = document.getElementById(progressId + 'Bar');
+
+			if (show) {
+				progress.style.display = 'block';
+				progressBar.style.width = '0%';
+
+				// 模拟进度
+				let width = 0;
+				const interval = setInterval(() => {
+					if (width >= 90) {
+						clearInterval(interval);
+					} else {
+						width += 10;
+						progressBar.style.width = width + '%';
+					}
+				}, 100);
+			} else {
+				progressBar.style.width = '100%';
+				setTimeout(() => {
+					progress.style.display = 'none';
+				}, 300);
+			}
+		}
+
+		// 显示结果
+		function showResult(elementId, message, type) {
+			const element = document.getElementById(elementId);
+			element.textContent = message;
+			element.className = `result ${type}`;
+			element.style.display = 'block';
+		}
+
+		// 清空结果
+		function clearResults() {
+			document.getElementById('singleResult').style.display = 'none';
+			document.getElementById('multipleResult').style.display = 'none';
+			document.getElementById('fileList').innerHTML = '';
+		}
+
+		// 格式化文件大小
+		function formatFileSize(bytes) {
+			if (bytes === 0) return '0 Bytes';
+			const k = 1024;
+			const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+			const i = Math.floor(Math.log(bytes) / Math.log(k));
+			return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+		}
+	</script>
+</body>
+
+</html>
