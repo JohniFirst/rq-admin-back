@@ -176,7 +176,7 @@
 				});
 
 				const result = await response.json();
-				showResult('singleResult', JSON.stringify(result, null, 2), result.code === 200 ? 'success' : 'error');
+				showResult('singleResult', JSON.stringify(result,), result.code === 200 ? 'success' : 'error');
 			} catch (error) {
 				showResult('singleResult', '上传失败: ' + error.message, 'error');
 			} finally {
@@ -208,7 +208,7 @@
 				});
 
 				const result = await response.json();
-				showResult('multipleResult', JSON.stringify(result, null, 2), result.code === 200 ? 'success' : 'error');
+				showResult('multipleResult', JSON.stringify(result,), result.code === 200 ? 'success' : 'error');
 			} catch (error) {
 				showResult('multipleResult', '上传失败: ' + error.message, 'error');
 			} finally {
@@ -244,9 +244,9 @@
                             <strong>${file.originalFilename}</strong><br>
                             <small>ID: ${file.id} | 大小: ${formatFileSize(file.fileSize)} | 类型: ${file.fileType}</small><br>
                             <small>上传时间: ${file.uploadTime} | 状态: ${file.isEnabled}</small><br>
-                            <button class="btn btn-danger" onclick="deleteFile(${file.id})">删除</button>
-                            <a href="/api/file/download/${file.id}" download="${file.originalFilename}">下载 ${file.originalFilename}</a>
-                        	                            <button class="btn" onclick="downloadFile(${file.id})">下载</button>
+                            <button class="btn btn-danger" onclick="deleteFile('${file.id}')">删除</button>
+                            <a href="/file/download/${file.id}" download="${file.originalFilename}">下载 ${file.originalFilename}</a>
+                        	<button class="btn" onclick="downloadFile(${file.id})">下载</button>
                         </div>
                     `;
 				});

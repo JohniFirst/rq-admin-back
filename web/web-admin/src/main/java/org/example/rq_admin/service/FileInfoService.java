@@ -22,8 +22,11 @@ import java.util.Optional;
 @Transactional
 public class FileInfoService {
 
-    @Autowired
-    private FileInfoRepository fileInfoRepository;
+    private final FileInfoRepository fileInfoRepository;
+
+    public FileInfoService(FileInfoRepository fileInfoRepository) {
+        this.fileInfoRepository = fileInfoRepository;
+    }
 
     /**
      * 保存文件信息
@@ -35,7 +38,7 @@ public class FileInfoService {
     /**
      * 根据ID查找文件信息
      */
-    public Optional<FileInfo> findById(Long id) {
+    public Optional<FileInfo> findById(String id) {
         return fileInfoRepository.findById(id);
     }
 
@@ -146,12 +149,12 @@ public class FileInfoService {
     /**
      * 根据多个条件查询文件信息
      */
-    public Page<FileInfo> findByConditions(Long uploadUserId, String fileType, IsEnabled isEnabled, 
-                                         LocalDateTime startTime, LocalDateTime endTime, 
-                                         String originalFilename, int pageNumber, int pageSize) {
+    public Page<FileInfo> findByConditions(Long uploadUserId, String fileType, IsEnabled isEnabled,
+                                           LocalDateTime startTime, LocalDateTime endTime,
+                                           String originalFilename, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByConditions(uploadUserId, fileType, isEnabled, 
-                                                  startTime, endTime, originalFilename, pageable);
+        return fileInfoRepository.findByConditions(uploadUserId, fileType, isEnabled,
+                startTime, endTime, originalFilename, pageable);
     }
 
     /**
@@ -167,7 +170,7 @@ public class FileInfoService {
     /**
      * 更新文件状态
      */
-    public FormatResponseData<ObjectUtils.Null> updateFileStatus(Long fileId, IsEnabled isEnabled) {
+    public FormatResponseData<ObjectUtils.Null> updateFileStatus(String fileId, IsEnabled isEnabled) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
@@ -182,7 +185,7 @@ public class FileInfoService {
     /**
      * 更新文件描述
      */
-    public FormatResponseData<ObjectUtils.Null> updateFileDescription(Long fileId, String description) {
+    public FormatResponseData<ObjectUtils.Null> updateFileDescription(String fileId, String description) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
@@ -197,7 +200,7 @@ public class FileInfoService {
     /**
      * 删除文件信息
      */
-    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(Long fileId) {
+    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(String fileId) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             fileInfoRepository.deleteById(fileId);
@@ -210,11 +213,11 @@ public class FileInfoService {
     /**
      * 批量删除文件信息
      */
-    public FormatResponseData<ObjectUtils.Null> deleteFileInfos(List<Long> fileIds) {
+    public FormatResponseData<ObjectUtils.Null> deleteFileInfos(List<String> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
             return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要删除的文件");
         }
-        
+
         fileInfoRepository.deleteAllById(fileIds);
         return new FormatResponseData<>(ResponseStatus.SUCCESS, "批量删除成功");
     }
