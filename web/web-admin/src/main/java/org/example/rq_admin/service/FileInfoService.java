@@ -6,7 +6,6 @@ import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
 import org.example.rq_admin.repository.FileInfoRepository;
 import org.example.rq_admin.response_format.FormatResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
