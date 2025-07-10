@@ -6,11 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.example.PaginationConfig;
 import org.example.rq_admin.entity.Users;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.service.UsersService;
 import org.example.rq_admin.response_format.FormatResponseData;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,11 +65,11 @@ public class UsersController {
 
     @Operation(summary = "获取用户列表", description = "分页获取所有用户")
     @PostMapping("/user/list")
-    public FormatResponseData<Page<Users>> getAllUsers(
-            @Parameter(description = "页码") @RequestParam(defaultValue = "0") Integer pageNumber,
+    public FormatResponseData<PaginationConfig<Users>> getAllUsers(
+            @Parameter(description = "页码（从1开始）") @RequestParam(defaultValue = "1") Integer pageNumber,
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize
     ) {
-        Page<Users> users = usersService.getAllUser(pageNumber, pageSize);
+        PaginationConfig<Users> users = usersService.getAllUser(pageNumber, pageSize);
 
         return new FormatResponseData<>(ResponseStatus.SUCCESS, users);
     }

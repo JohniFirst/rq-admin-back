@@ -3,6 +3,7 @@ package org.example.rq_admin.calendar;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.example.PaginationConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class CalendarEventService {
     private final CalendarEventRepository repository;
 
-    public Page<CalendarEvent> findAll(JsonNode event, Pageable pageable) {
+    public PaginationConfig<CalendarEvent> findAll(JsonNode event, Pageable pageable) {
         Specification<CalendarEvent> spec = (root, query, cb) -> {
             if (event != null) {
                 // 简单模糊查询 event json 字符串
@@ -28,7 +29,8 @@ public class CalendarEventService {
             }
             return cb.conjunction();
         };
-        return repository.findAll(spec, pageable);
+        Page<CalendarEvent> page = repository.findAll(spec, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.example.PaginationConfig;
 import org.example.enums.IsEnabled;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
@@ -15,7 +16,6 @@ import org.example.rq_admin.service.FileInfoService;
 import org.example.rq_admin.service.FileUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -237,11 +237,11 @@ public class FileUploadController {
             @ApiResponse(responseCode = "500", description = "服务器内部错误")
     })
     @GetMapping("/list")
-    public FormatResponseData<Page<FileInfo>> getFileList(
-            @Parameter(description = "页码") @RequestParam(defaultValue = "0") Integer pageNumber,
+    public FormatResponseData<PaginationConfig<FileInfo>> getFileList(
+            @Parameter(description = "页码（从1开始）") @RequestParam(defaultValue = "1") Integer pageNumber,
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize) {
 
-        Page<FileInfo> fileList = fileInfoService.findAll(pageNumber, pageSize);
+        PaginationConfig<FileInfo> fileList = fileInfoService.findAll(pageNumber, pageSize);
         return new FormatResponseData<>(ResponseStatus.SUCCESS, fileList);
     }
 

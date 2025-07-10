@@ -1,6 +1,7 @@
 package org.example.rq_admin.service;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.example.PaginationConfig;
 import org.example.enums.IsEnabled;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
@@ -64,10 +65,14 @@ public class FileInfoService {
 
     /**
      * 分页获取所有文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findAll(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findAll(pageable);
+    public PaginationConfig<FileInfo> findAll(int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findAll(pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
@@ -79,10 +84,14 @@ public class FileInfoService {
 
     /**
      * 根据上传用户ID分页获取文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByUploadUserId(Long uploadUserId, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByUploadUserId(uploadUserId, pageable);
+    public PaginationConfig<FileInfo> findByUploadUserId(Long uploadUserId, int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByUploadUserId(uploadUserId, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
@@ -94,10 +103,14 @@ public class FileInfoService {
 
     /**
      * 根据文件类型分页获取文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByFileType(String fileType, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByFileType(fileType, pageable);
+    public PaginationConfig<FileInfo> findByFileType(String fileType, int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByFileType(fileType, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
@@ -109,10 +122,14 @@ public class FileInfoService {
 
     /**
      * 根据状态分页获取文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByIsEnabled(IsEnabled isEnabled, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByIsEnabled(isEnabled, pageable);
+    public PaginationConfig<FileInfo> findByIsEnabled(IsEnabled isEnabled, int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByIsEnabled(isEnabled, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
@@ -124,10 +141,14 @@ public class FileInfoService {
 
     /**
      * 根据上传时间范围分页获取文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByUploadTimeBetween(LocalDateTime startTime, LocalDateTime endTime, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByUploadTimeBetween(startTime, endTime, pageable);
+    public PaginationConfig<FileInfo> findByUploadTimeBetween(LocalDateTime startTime, LocalDateTime endTime, int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByUploadTimeBetween(startTime, endTime, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
@@ -139,21 +160,29 @@ public class FileInfoService {
 
     /**
      * 根据原始文件名模糊查询并分页
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByOriginalFilenameContaining(String originalFilename, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByOriginalFilenameContaining(originalFilename, pageable);
+    public PaginationConfig<FileInfo> findByOriginalFilenameContaining(String originalFilename, int pageNumber, int pageSize) {
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByOriginalFilenameContaining(originalFilename, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
      * 根据多个条件查询文件信息
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<FileInfo> findByConditions(Long uploadUserId, String fileType, IsEnabled isEnabled,
+    public PaginationConfig<FileInfo> findByConditions(Long uploadUserId, String fileType, IsEnabled isEnabled,
                                            LocalDateTime startTime, LocalDateTime endTime,
                                            String originalFilename, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("uploadTime").descending());
-        return fileInfoRepository.findByConditions(uploadUserId, fileType, isEnabled,
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
+        Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
+        Page<FileInfo> page = fileInfoRepository.findByConditions(uploadUserId, fileType, isEnabled,
                 startTime, endTime, originalFilename, pageable);
+        return PaginationConfig.fromPage(page);
     }
 
     /**

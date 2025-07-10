@@ -1,5 +1,6 @@
 package org.example.rq_admin.service;
 
+import org.example.PaginationConfig;
 import org.example.rq_admin.entity.Role;
 import org.example.rq_admin.entity.Users;
 import org.example.enums.IsEnabled;
@@ -96,14 +97,19 @@ public class UsersService {
 
     /**
      * 查询所有用户
+     * @param pageNumber 页码（从1开始）
+     * @param pageSize 每页大小
      */
-    public Page<Users> getAllUser(Integer pageNumber, Integer pageSize) {
+    public PaginationConfig<Users> getAllUser(Integer pageNumber, Integer pageSize) {
         if (pageNumber == null || pageSize == null) {
-            return new PageImpl<>(usersRepository.findAll());
+            Page<Users> page = new PageImpl<>(usersRepository.findAll());
+            return PaginationConfig.fromPage(page);
         }
+        int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return usersRepository.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(springPageNumber, pageSize, sort);
+        Page<Users> page = usersRepository.findAll(pageRequest);
+        return PaginationConfig.fromPage(page);
     }
 
     /**
