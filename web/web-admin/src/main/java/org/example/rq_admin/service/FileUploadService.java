@@ -3,6 +3,7 @@ package org.example.rq_admin.service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.enums.FileUploadStatusForAntd;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
 import org.example.rq_admin.response_format.FormatResponseData;
@@ -165,11 +166,10 @@ public class FileUploadService {
     private FileUploadResponse buildUploadResponse(FileUploadResult result, FileInfo savedFileInfo) {
         FileUploadResponse response = new FileUploadResponse();
         response.setId(savedFileInfo.getId());
-        response.setOriginalFilename(result.originalFilename());
+        response.setName(result.originalFilename());
         response.setFilename(result.uniqueFilename());
         response.setFileSize(result.file().getSize());
         response.setFileType(result.file().getContentType());
-        response.setFilePath(result.dateFolder() + "/" + result.uniqueFilename());
         response.setUploadTime(LocalDateTime.now());
         return response;
     }
@@ -188,11 +188,14 @@ public class FileUploadService {
     @Getter
     public static class FileUploadResponse {
         private String id;
-        private String originalFilename;
+//        上传的原始文件名
+        private String name;
+//        保存到服务器的文件名
         private String filename;
+//        文件大小
         private long fileSize;
+//        文件类型
         private String fileType;
-        private String filePath;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime uploadTime;
