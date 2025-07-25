@@ -1,5 +1,6 @@
 package org.example.rq_admin.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.rq_admin.entity.Role;
 import org.example.rq_admin.service.RoleService;
 import org.example.rq_admin.service.RoleSimpleInfo;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "角色管理", description = "系统角色管理的相关接口")
 @RestController
 public class RoleController {
 

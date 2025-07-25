@@ -20,11 +20,11 @@ file:
     path: uploads
     max-size: 10485760  # 10MB
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
     serialization:
-      write-dates-as-timestamps: false
-    default-property-inclusion: non_null
+#      write-dates-as-timestamps: false
+#    default-property-inclusion: non_null
 
 server:
   port: 8080
@@ -33,31 +33,19 @@ server:
 
 # springdoc-openapi项目配置
 springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
   api-docs:
     path: /v3/api-docs
-    enabled: true
-  default-flat-param-object: true
+  group-configs:
+    - group: 'default'
+      display-name: '默认分组'
+      paths-to-match: '/**'
+      packages-to-scan: org.example.rq_admin
 
-# knife4j的增强配置
 knife4j:
   enable: true
-  enable-group: false
   setting:
     language: zh_cn
-    enable-swagger-models: true
-    enable-document-manage: true
-    swagger-model-name: 实体类列表
-    enable-version: false
-    enable-reload-cache-parameter: false
-    enable-after-script: true
-    enable-filter-multipart-api-method-type: POST
-    enable-filter-multipart-apis: false
-    enable-request-cache: true
-    enable-host: false
-    enable-search: true
-    enable-debug: true
-    enable-open-api: true
-  cors: true
-  production: false
-  basic:
-    enable: false

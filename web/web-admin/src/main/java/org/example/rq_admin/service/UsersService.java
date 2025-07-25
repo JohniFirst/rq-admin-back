@@ -1,5 +1,6 @@
 package org.example.rq_admin.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.PaginationConfig;
 import org.example.rq_admin.entity.Role;
 import org.example.rq_admin.entity.Users;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UsersService {
 
