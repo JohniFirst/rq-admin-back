@@ -1,6 +1,6 @@
 package org.example.rq_admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.rq_admin.DTO.MenuDTO;
 import org.example.rq_admin.entity.Menu;
@@ -19,6 +19,7 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    @Operation(summary = "菜单列表", description = "获取当前用户菜单")
     @GetMapping("/menu/list")
     private List<MenuDTO> getAllMenus(@RequestParam(required = false) MenuDTO menu) {
 //        LambdaQueryWrapper<MenuDTO> queryWrapper = new LambdaQueryWrapper<>();
@@ -28,26 +29,31 @@ public class MenuController {
         return menuService.getMenusWithRolesDTO();
     }
 
+    @Operation(summary = "所有菜单列表", description = "获取系统所有菜单")
     @GetMapping("/menu/without-role")
     private List<Menu> getMenusCommonList() {
         return menuService.getMenusWithChildren();
     }
 
+    @Operation(summary = "用户菜单", description = "获取当前用户菜单")
     @GetMapping("/menu/{id}")
     public Menu getMenuById(@PathVariable Long id) {
         return menuService.getMenuById(id);
     }
 
+    @Operation(summary = "新增菜单", description = "新增一个用户菜单")
     @PostMapping("/menu-add")
     public void menuAdd(@RequestBody Menu menu) {
         menuService.addMenu(menu);
     }
 
+    @Operation(summary = "修改菜单", description = "修改当前菜单项")
     @PutMapping("/menu-update")
     public void updateMenu(@RequestBody Menu menu) {
         menuService.updateMenu(menu);
     }
 
+    @Operation(summary = "删除菜单", description = "使用id删除菜单")
     @DeleteMapping("/menu/{id}")
     public void deleteMenu(@PathVariable Long id) {
         menuService.deleteMenu(id);

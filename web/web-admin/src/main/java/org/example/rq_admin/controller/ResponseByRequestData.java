@@ -1,5 +1,6 @@
 package org.example.rq_admin.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.enums.ResponseStatus;
@@ -15,6 +16,7 @@ public class ResponseByRequestData {
     private static final Logger logger = LoggerFactory.getLogger(ResponseByRequestData.class);
 
 
+    @Operation(summary = "状态相应", description = "根据请求参数，接口返回处理成功/失败")
     @GetMapping("/test/response-by-params/{isSuccess}")
     public FormatResponseData ResponseByRequestDataFn(
             @Parameter(description = "期待响应成功还是失败") @PathVariable("isSuccess") Boolean isSuccess
