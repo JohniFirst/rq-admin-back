@@ -2,8 +2,10 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.enums.ResponseStatus;
 import org.example.rq_admin.DTO.MenuDTO;
 import org.example.rq_admin.entity.Menu;
+import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.MenuService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +23,9 @@ public class MenuController {
 
     @Operation(summary = "菜单列表", description = "获取当前用户菜单")
     @GetMapping("/menu/list")
-    private List<MenuDTO> getAllMenus(@RequestParam(required = false) MenuDTO menu) {
-//        LambdaQueryWrapper<MenuDTO> queryWrapper = new LambdaQueryWrapper<>();
-//        queryWrapper.eq(menu.getTitle() != null, MenuDTO::getTitle, menu.getTitle());
-//        queryWrapper.eq(menu.getUrl() != null, MenuDTO::getUrl, menu.getUrl());
-
-        return menuService.getMenusWithRolesDTO();
+    private FormatResponseData<List<MenuDTO>>  getAllMenus(@RequestParam(required = false) MenuDTO menu) {
+        List<MenuDTO> list = menuService.getMenusWithRolesDTO();
+        return new FormatResponseData<>(ResponseStatus.SUCCESS, list);
     }
 
     @Operation(summary = "所有菜单列表", description = "获取系统所有菜单")

@@ -33,10 +33,10 @@ public class Knife4jConfiguration {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("XXX用户系统API")
-                        .version("1.0")
+                        .title("Rq Admin一站式后台管理系统")
+                        .version("0.1.0")
 
-                        .description("Knife4j集成springdoc-openapi示例")
+                        .description("集成knife4j，使用最新的spring boot3，前端使用react + ts， 集成常用的复杂组件")
                         .termsOfService("http://doc.xiaominfo.com")
                         .license(new License().name("Apache 2.0")
                                 .url("http://doc.xiaominfo.com")));

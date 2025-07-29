@@ -1,16 +1,13 @@
 package org.example.rq_admin.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.example.enums.IsEnabled;
+import lombok.Data;
 
 import java.math.BigInteger;
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
+@Data
 public class Users {
 
     @Id
@@ -45,15 +42,4 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-
-    public Users() {}
-
-    public Users(String name, String password) {
-        IsEnabled enabled = IsEnabled.ENABLED;
-
-        this.username = name;
-        this.password = password;
-        this.isEnabled = enabled.getStatusCode();
-        this.auditStatus = false;
-    }
 }

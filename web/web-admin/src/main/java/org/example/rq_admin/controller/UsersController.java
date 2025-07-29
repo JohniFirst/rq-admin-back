@@ -1,5 +1,6 @@
 package org.example.rq_admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,8 @@ import jakarta.validation.Valid;
 import org.example.PaginationConfig;
 import org.example.rq_admin.entity.Users;
 import org.example.enums.ResponseStatus;
+import org.example.rq_admin.mapper.UsersMapper;
+import org.example.rq_admin.repository.UsersRepository;
 import org.example.rq_admin.service.UsersService;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,13 @@ import java.util.List;
 public class UsersController {
 
     private final UsersService usersService;
+    private final UsersRepository usersRepository;
+    private final UsersMapper usersMapper;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, UsersRepository usersRepository, UsersMapper usersMapper) {
         this.usersService = usersService;
+        this.usersRepository = usersRepository;
+        this.usersMapper = usersMapper;
     }
 
     @Operation(summary = "用户登录", description = "使用用户名和密码进行登录")
@@ -32,7 +39,7 @@ public class UsersController {
         @ApiResponse(responseCode = "400", description = "用户名或密码错误")
     })
     @PostMapping("/login")
-    public FormatResponseData handleLogin(@Valid @RequestBody Users user) {
+    public FormatResponseData handleLogin(@Valid @RequestBody UserLoginRequestParams user) {
         if (!usersService.handleLogin(user.getUsername(), user.getPassword())) {
             return new FormatResponseData(ResponseStatus.FAILURE, "用户名或密码错误");
         }
@@ -74,9 +81,19 @@ public class UsersController {
         return new FormatResponseData<>(ResponseStatus.SUCCESS, users);
     }
 
-    @Operation(summary = "更新用户状态", description = "启用或禁用用户")
+    @Operation(summary = "修改用户状态", description = "启用或禁用用户")
     @PutMapping("/user/update")
     public FormatResponseData updateUserIsEnabled(@Valid @RequestBody Users user) {
         return usersService.updateUserIsEnabled(user.getId(), user.getIsEnabled());
+    }
+
+    @Operation(summary = "模糊查询用户列表", description = "支持用户名的模糊查询")
+    @GetMapping("/user/query/{username}")
+    public FormatResponseData<List<Users>> queryUsers(@Parameter(description = "用户名") @PathVariable String username) {
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("username", username);
+
+        List<Users> usersList = usersMapper.selectList(queryWrapper);
+        return new FormatResponseData<>(ResponseStatus.SUCCESS, usersList);
     }
 }
