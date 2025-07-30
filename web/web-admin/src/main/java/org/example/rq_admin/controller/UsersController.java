@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.example.PaginationConfig;
+import org.example.rq_admin.DTO.UserLoginDTO;
 import org.example.rq_admin.entity.Users;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.mapper.UsersMapper;
@@ -39,7 +40,7 @@ public class UsersController {
         @ApiResponse(responseCode = "400", description = "用户名或密码错误")
     })
     @PostMapping("/login")
-    public FormatResponseData handleLogin(@Valid @RequestBody UserLoginRequestParams user) {
+    public FormatResponseData handleLogin(@Valid @RequestBody UserLoginDTO user) {
         if (!usersService.handleLogin(user.getUsername(), user.getPassword())) {
             return new FormatResponseData(ResponseStatus.FAILURE, "用户名或密码错误");
         }

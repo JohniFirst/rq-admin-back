@@ -1,9 +1,6 @@
 package org.example.rq_admin.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,10 +30,12 @@ public class MdFileSystem {
 
     @Schema(description = "创建人ID")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     public Long creatorId;
 
     @Schema(description = "创建人姓名")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     public Long creatorName;
 
     @Schema(description = "文件描述，63-255个字符")
@@ -47,7 +46,7 @@ public class MdFileSystem {
     public MdFileStatus status;
 
     @Schema(description = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
     @JsonIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime createTime;

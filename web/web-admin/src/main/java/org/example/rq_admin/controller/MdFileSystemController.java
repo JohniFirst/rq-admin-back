@@ -3,9 +3,11 @@ package org.example.rq_admin.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.enums.ResponseStatus;
+import org.example.rq_admin.DTO.MdFileSystemAddDTO;
 import org.example.rq_admin.entity.MdFileSystem;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.impl.MdFileSystemServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,10 @@ public class MdFileSystemController {
 
     @Operation(summary = "新增md文件", description = "新建一个md文档")
     @PostMapping("/new")
-    public FormatResponseData newMdFileSystem(@RequestBody MdFileSystem mdFileSystem) {
+    public FormatResponseData newMdFileSystem(@RequestBody MdFileSystemAddDTO mdFileSystemAddDTO) {
+        // 通过DTO的方式，使得接口文档变得很干净，同时也满足需求
+        MdFileSystem mdFileSystem = new MdFileSystem();
+        BeanUtils.copyProperties(mdFileSystemAddDTO, mdFileSystem);
         boolean isSuccess = mdFileSystemService.save(mdFileSystem);
         return new FormatResponseData<>(isSuccess ? ResponseStatus.SUCCESS : ResponseStatus.FAILURE);
     }

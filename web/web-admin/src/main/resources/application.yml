@@ -51,10 +51,10 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
-  basic:
-    username: user
-    password: 123456
-    enable: true
+#  basic:
+#    username: user
+#    password: 123456
+#    enable: true
 
 mybatis-plus:
   configuration:
