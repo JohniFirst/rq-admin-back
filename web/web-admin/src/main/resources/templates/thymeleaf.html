@@ -10,5 +10,26 @@
 </head>
 <body>
     <h1>Test Thymeleaf</h1>
+    <form action="/thymeleaf/form" method="post">
+        <p>
+            <label for="name">用户名：</label>
+            <input name="name" id="name" placeholder="请输入用户名">
+        </p>
+        <p>
+            <label for="age">年龄：</label>
+            <input name="age" id="age" type="number" placeholder="请输入年龄">
+        </p>
+        <p>
+            <label for="email">电子邮箱：</label>
+            <input name="email" id="email" type="email" placeholder="请输入电子邮箱">
+        </p>
+        <p>
+            <label for="remarks">备注：</label>
+            <textarea name="remarks" id="remarks" placeholder="输入一些备注"></textarea>
+        </p>
+
+        <button type="submit">提交</button>
+        <button type="reset">重置</button>
+    </form>
 </body>
 </html>

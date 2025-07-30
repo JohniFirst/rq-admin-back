@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scale=no">
+    <meta name="description" content="这是一个关于HTML meta标签的介绍页面">
+    <meta name="keywords" content="HTML, meta标签, SEO">
+    <meta name="robots" content="index,follow">
+    <title>表单提交成功</title>
+</head>
+<body>
+    <h1>表单提交成功，以下是提交的表单</h1>
+    <div>
+        <p>姓名: <span th:text="${user.name}"></span></p>
+        <p>年龄: <span th:text="${user.age}"></span></p>
+        <p>电子邮箱: <span th:text="${user.email}"></span></p>
+        <p>备注: <span th:text="${user.remarks}"></span></p>
+    </div>
+</body>
+</html>

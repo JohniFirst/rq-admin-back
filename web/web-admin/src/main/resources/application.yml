@@ -13,6 +13,8 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  thymeleaf:
+    cache: false
 
 # 文件上传配置
 file:
