@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: rq_admin_app
+  datasource:
+    url: jdbc:mysql://localhost:3306/rq_admin
+    username: root
+    password: admin
+
+server:
+  port: 8999

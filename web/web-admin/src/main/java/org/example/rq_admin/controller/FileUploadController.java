@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.example.PaginationConfig;
 import org.example.enums.IsEnabled;
@@ -30,6 +31,7 @@ import java.util.Optional;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Slf4j
 @Tag(name = "文件上传", description = "文件上传相关的接口，包括单文件上传、多文件上传、文件下载等功能")
 @RestController
 @RequestMapping("/file")
@@ -58,6 +60,7 @@ public class FileUploadController {
     @PostMapping("/upload")
     public FormatResponseData<FileUploadService.FileUploadResponse> uploadFile(
             @Parameter(description = "要上传的文件") @RequestParam("file") MultipartFile file) {
+
         return fileUploadService.uploadFile(file);
     }
 
