@@ -9,14 +9,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.example.PaginationConfig;
 import org.example.rq_admin.DTO.UserLoginDTO;
+import org.example.rq_admin.DTO.UserRegisterDTO;
 import org.example.rq_admin.entity.Users;
 import org.example.enums.ResponseStatus;
 import org.example.rq_admin.mapper.UsersMapper;
 import org.example.rq_admin.repository.UsersRepository;
 import org.example.rq_admin.service.UsersService;
 import org.example.rq_admin.response_format.FormatResponseData;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.Utilities;
 import java.util.List;
 
 @Tag(name = "用户管理", description = "用户相关的接口，包括登录、注册、用户管理等功能")
@@ -53,11 +56,13 @@ public class UsersController {
         @ApiResponse(responseCode = "400", description = "用户名已存在")
     })
     @PostMapping("/register")
-    public FormatResponseData register(@Valid @RequestBody Users user) {
+    public FormatResponseData register(@Valid @RequestBody UserRegisterDTO user) {
         if (usersService.checkUserExists(user.getUsername())) {
             return new FormatResponseData(ResponseStatus.FAILURE, "用户名已存在");
         }
-        usersService.saveUsers(user);
+        Users users = new Users();
+        BeanUtils.copyProperties(user, users);
+        usersService.saveUsers(users);
         return new FormatResponseData(ResponseStatus.SUCCESS, "注册成功");
     }
 
