@@ -29,7 +29,7 @@ public class UsersInfoController {
             return new FormatResponseData<>(ResponseStatus.FAILURE, "请输入用户名或密码");
         }
 
-        if (usersInfoService.checkLoginInfo(user) == null) {
+        if (!usersInfoService.checkLoginInfo(user)) {
             return new FormatResponseData<>(ResponseStatus.FAILURE, "请输入正确的用户名或密码");
         }
 
