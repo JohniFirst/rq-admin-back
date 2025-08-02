@@ -1,11 +1,15 @@
 package org.example.rq_admin.entity.DTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class UserRegisterDTO {
-    // 用户名
+    @Schema(description = "用户名")
+    @NotNull
     private String username;
+
     // 密码
     private String password;
     // 电子邮箱

@@ -1,5 +1,6 @@
 package org.example.rq_admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class Users {
+@TableName("user")
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ResponseStatus {
     SUCCESS(200, "请求成功"),
-    FAILURE(500, "请求失败");
+    FAILURE(201, "请求失败");
 
     private final int code;
     private final String message;
