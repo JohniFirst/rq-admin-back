@@ -1,16 +1,17 @@
-package org.example.rq_admin.calendar;
+package org.example.rq_admin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.example.PaginationConfig;
+import org.example.rq_admin.entity.CalendarEvent;
+import org.example.rq_admin.repository.CalendarEventRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
