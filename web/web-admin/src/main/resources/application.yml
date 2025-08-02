@@ -15,9 +15,6 @@ spring:
       max-request-size: 100MB
   thymeleaf:
     cache: false
-  mvc:
-    problemdetails:
-      enabled: true
 
 # 文件上传配置
 file:
