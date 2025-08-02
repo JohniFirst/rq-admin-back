@@ -1,8 +1,7 @@
 package org.example.rq_admin.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.example.rq_admin.DTO.MenuDTO;
-import org.example.rq_admin.DTO.RoleInfoDTO;
+import org.example.rq_admin.entity.DTO.MenuDTO;
+import org.example.rq_admin.entity.DTO.RoleInfoDTO;
 import org.example.rq_admin.entity.Menu;
 import org.example.rq_admin.repository.MenuRepository;
 import org.springframework.stereotype.Service;

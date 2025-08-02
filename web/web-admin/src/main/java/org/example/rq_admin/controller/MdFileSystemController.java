@@ -3,7 +3,7 @@ package org.example.rq_admin.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.enums.ResponseStatus;
-import org.example.rq_admin.DTO.MdFileSystemAddDTO;
+import org.example.rq_admin.entity.DTO.MdFileSystemAddDTO;
 import org.example.rq_admin.entity.MdFileSystem;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.impl.MdFileSystemServiceImpl;

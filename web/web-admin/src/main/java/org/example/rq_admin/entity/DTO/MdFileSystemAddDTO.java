@@ -1,4 +1,4 @@
-package org.example.rq_admin.DTO;
+package org.example.rq_admin.entity.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

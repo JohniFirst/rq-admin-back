@@ -1,7 +1,5 @@
 package org.example.rq_admin.repository;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.example.rq_admin.DTO.MenuDTO;
 import org.example.rq_admin.entity.Menu;
 import org.example.rq_admin.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
