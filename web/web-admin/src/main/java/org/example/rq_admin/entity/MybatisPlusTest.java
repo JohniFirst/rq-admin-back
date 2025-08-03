@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class MybatisPlusTest {
 
-    public Long id;
+    private Long id;
 
-    public String name1;
+    private String name1;
 
-    public String name2;
+    private String name2;
 }
