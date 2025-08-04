@@ -8,9 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.example.PaginationConfig;
-import org.example.enums.IsEnabled;
-import org.example.enums.ResponseStatus;
+import org.example.rq_admin.config.PaginationConfig;
+import org.example.rq_admin.enums.IsEnabled;
+import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.FileInfoService;

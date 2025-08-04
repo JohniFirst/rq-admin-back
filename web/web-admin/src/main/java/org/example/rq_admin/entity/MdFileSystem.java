@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.example.enums.MdFileStatus;
+import org.example.rq_admin.enums.MdFileStatus;
 
 import java.time.LocalDateTime;
 

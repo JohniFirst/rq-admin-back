@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.example.enums.ResponseStatus;
+import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.MybatisPlusTest;
 import org.example.rq_admin.mapper.MybatisPlusTestMapper;
 import org.example.rq_admin.response_format.FormatResponseData;

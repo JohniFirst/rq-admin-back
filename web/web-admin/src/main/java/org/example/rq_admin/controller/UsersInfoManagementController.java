@@ -2,7 +2,7 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.enums.ResponseStatus;
+import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.UserInfo;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.impl.UsersInfoServiceImpl;

@@ -1,7 +1,7 @@
 package org.example.rq_admin.repository;
 
 import org.example.rq_admin.entity.FileInfo;
-import org.example.enums.IsEnabled;
+import org.example.rq_admin.enums.IsEnabled;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

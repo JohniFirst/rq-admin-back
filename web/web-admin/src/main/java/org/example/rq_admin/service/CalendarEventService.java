@@ -3,7 +3,7 @@ package org.example.rq_admin.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.example.PaginationConfig;
+import org.example.rq_admin.config.PaginationConfig;
 import org.example.rq_admin.entity.CalendarEvent;
 import org.example.rq_admin.repository.CalendarEventRepository;
 import org.springframework.data.domain.Page;

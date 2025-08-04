@@ -1,4 +1,4 @@
-package org.example;
+package org.example.rq_admin.config;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,7 @@ package org.example.rq_admin.response_format;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.enums.ResponseStatus;
+import org.example.rq_admin.enums.ResponseStatus;
 
 @Data
 @AllArgsConstructor

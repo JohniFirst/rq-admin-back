@@ -2,7 +2,7 @@ package org.example.rq_admin.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
-import org.example.enums.MdFileStatus;
+import org.example.rq_admin.enums.MdFileStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

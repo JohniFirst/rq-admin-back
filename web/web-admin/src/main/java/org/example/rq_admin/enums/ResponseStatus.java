@@ -1,4 +1,4 @@
-package org.example.enums;
+package org.example.rq_admin.enums;
 
 import lombok.Getter;
 
