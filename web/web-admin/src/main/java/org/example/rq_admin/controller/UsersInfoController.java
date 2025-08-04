@@ -11,9 +11,10 @@ import org.example.rq_admin.service.impl.UsersInfoServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+// 约定 放在这个模块的都是不需要认证的接口，以auth开头
 @Tag(name = "用户认证", description = "包括登录、注册等功能")
 @RestController
-@RequestMapping
+@RequestMapping("/auth")
 public class UsersInfoController {
 
     private final UsersInfoServiceImpl usersInfoService;

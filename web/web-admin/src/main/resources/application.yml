@@ -59,3 +59,11 @@ knife4j:
 mybatis-plus:
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+
+
+
+application:
+  security:
+    jwt:
+      secret-key: qQZ8pL2xK5mN7sP9wR2tU4vX6yB1cD3eF5gH7jJ9l
+      expiration: 43200000
