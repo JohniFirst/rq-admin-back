@@ -14,7 +14,7 @@ public class LambdaFunctional {
         // 2. 存储为 Base64
         String base64Key = Base64.getEncoder().encodeToString(key.getEncoded());
         System.out.println("Saved Key (Base64): " + base64Key);
-        
+
         commonUsage();
 
         anonymousUsage();
@@ -51,6 +51,7 @@ public class LambdaFunctional {
     /**
      * lambda表达式，可以省略掉接口实现中确认的那些字符，
      * new AddFn() {
+     * <p>
      *
      * @ Override public int add
      * }

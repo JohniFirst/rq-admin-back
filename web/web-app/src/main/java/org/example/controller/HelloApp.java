@@ -15,6 +15,6 @@ public class HelloApp {
     @Operation(summary = "hello", description = "你好，世界")
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseEntity<String> hello(@Validated @Size(min = 2) String name) {
-        return ResponseEntity.ok("Hello World");
+        return ResponseEntity.ok("Hello World" + name);
     }
 }
