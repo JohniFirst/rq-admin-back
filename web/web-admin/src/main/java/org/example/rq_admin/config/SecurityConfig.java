@@ -16,17 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity // 替代旧版 @EnableGlobalMethodSecurity，支持 @PreAuthorize 等注解
-@Profile({"prod", "test"})
+@Profile({"prod", "test", "dev"})
 public class SecurityConfig {
 
     // JWT 过滤器（需自行实现）
@@ -49,8 +43,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
+
         return new ProviderManager(authProvider);
     }
 
@@ -69,7 +65,7 @@ public class SecurityConfig {
                         // 放行用户获取认证相关接口，约定以auth开头
                         .requestMatchers("/auth/**").permitAll()
                         // 放行静态资源和 Swagger 文档（开发环境用）
-                        .requestMatchers("/doc.html", "/webjars/**","/v3/**", "/favicon.ico","/static/**").permitAll()
+                        .requestMatchers("/doc.html", "/webjars/**", "/v3/**", "/favicon.ico", "/static/**").permitAll()
                         // 其他所有请求需要认证
                         .anyRequest().authenticated()
                 )

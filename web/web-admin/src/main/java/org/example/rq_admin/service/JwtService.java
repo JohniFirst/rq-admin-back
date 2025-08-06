@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,36 +42,23 @@ public class JwtService {
     /**
      * 生成令牌（无额外信息）
      */
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(String username) {
+        return generateToken(new HashMap<>(), username);
     }
 
     /**
      * 生成包含额外信息的令牌
      */
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateToken(Map<String, Object> extraClaims, String username) {
+        return buildToken(extraClaims, username, jwtExpiration);
     }
 
     /**
      * 构建令牌的核心方法
      */
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
-        return Jwts
-                .builder()
-                .claims(extraClaims) // 0.12.x 版本用 claims() 替代 setClaims()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+    private String buildToken(Map<String, Object> extraClaims, String username, long expiration) {
+        return Jwts.builder().claims(extraClaims) // 0.12.x 版本用 claims() 替代 setClaims()
+                .subject(username).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSignInKey(), SignatureAlgorithm.HS512).compact();
     }
 
     /**
@@ -100,10 +87,8 @@ public class JwtService {
      * 提取所有声明
      */
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parser() // 0.12.x 版本用 parser() 替代 parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build() // 新增 build() 方法
+        return Jwts.parser() // 0.12.x 版本用 parser() 替代 parserBuilder()
+                .verifyWith(getSignInKey()).build() // 新增 build() 方法
                 .parseSignedClaims(token) // 0.12.x 版本用 parseSignedClaims() 替代 parseClaimsJws()
                 .getPayload();
     }
@@ -111,7 +96,7 @@ public class JwtService {
     /**
      * 获取签名密钥
      */
-    private Key getSignInKey() {
+    private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

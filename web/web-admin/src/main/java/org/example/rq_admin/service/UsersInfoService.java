@@ -6,7 +6,7 @@ import org.example.rq_admin.entity.UserInfo;
 
 public interface UsersInfoService extends IService<UserInfo> {
 
-    Boolean checkLoginInfo(UserLoginDTO userLoginDTO);
+    String checkLoginInfo(UserLoginDTO userLoginDTO);
 
     Boolean checkUserExists(String username);
 }

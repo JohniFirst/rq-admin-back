@@ -1,10 +1,20 @@
 package org.example.rq_admin.lambda;
 
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.crypto.SecretKey;
+import java.util.Base64;
 
 @Slf4j
 public class LambdaFunctional {
     public static void main(String[] args) {
+        SecretKey key = Jwts.SIG.HS512.key().build();
+
+        // 2. 存储为 Base64
+        String base64Key = Base64.getEncoder().encodeToString(key.getEncoded());
+        System.out.println("Saved Key (Base64): " + base64Key);
+        
         commonUsage();
 
         anonymousUsage();

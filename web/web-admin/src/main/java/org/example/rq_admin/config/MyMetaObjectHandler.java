@@ -11,10 +11,7 @@ import java.time.LocalDateTime;
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
 
-    /**
-     * 数据创建的时候自动更新createTime、updateTime
-     * @param metaObject
-     */
+    /** 数据创建的时候自动更新createTime、updateTime */
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "status", MdFileStatus.class, MdFileStatus.EDITING);
@@ -22,10 +19,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
     }
 
-    /**
-     * 数据更新的时候自动更新updateTime
-     * @param metaObject
-     */
+    /** 数据更新的时候自动更新updateTime */
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());

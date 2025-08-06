@@ -5,31 +5,38 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.rq_admin.entity.DTO.UserLoginDTO;
 import org.example.rq_admin.entity.UserInfo;
 import org.example.rq_admin.mapper.UsersInfoMapper;
+import org.example.rq_admin.service.JwtService;
 import org.example.rq_admin.service.UsersInfoService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersInfoServiceImpl extends ServiceImpl<UsersInfoMapper, UserInfo> implements UsersInfoService {
 
-    public UsersInfoServiceImpl(UsersInfoMapper usersInfoMapper) {
+    public UsersInfoServiceImpl(UsersInfoMapper usersInfoMapper, JwtService jwtService) {
         this.usersInfoMapper = usersInfoMapper;
+        this.jwtService = jwtService;
     }
 
     private final UsersInfoMapper usersInfoMapper;
+    private final JwtService jwtService;
 
     /**
      * @param userLoginDTO 用户登录的用户名密码
      * @return 数据库查询回来的用户名密码
      */
     @Override
-    public Boolean checkLoginInfo(UserLoginDTO userLoginDTO) {
+    public String checkLoginInfo(UserLoginDTO userLoginDTO) {
+        String token = "";
         LambdaQueryWrapper<UserInfo> userInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        userInfoLambdaQueryWrapper
-                .eq(UserInfo::getUsername, userLoginDTO.getUsername())
-                .eq(UserInfo::getPassword, userLoginDTO.getPassword());
+        userInfoLambdaQueryWrapper.eq(UserInfo::getUsername, userLoginDTO.getUsername()).eq(UserInfo::getPassword, userLoginDTO.getPassword());
 
-        return usersInfoMapper.selectCount(userInfoLambdaQueryWrapper) > 0;
+        if (usersInfoMapper.selectCount(userInfoLambdaQueryWrapper) > 0) {
+            token = jwtService.generateToken(userLoginDTO.getUsername());
+        }
+
+        return token;
+
     }
 
     /**
