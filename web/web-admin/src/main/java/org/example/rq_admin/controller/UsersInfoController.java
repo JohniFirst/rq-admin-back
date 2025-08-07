@@ -2,6 +2,7 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.example.rq_admin.entity.DTO.UserLoginDTO;
 import org.example.rq_admin.entity.DTO.UserRegisterDTO;
 import org.example.rq_admin.entity.UserInfo;
@@ -30,7 +31,7 @@ public class UsersInfoController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public FormatResponseData handleLogin(@RequestBody UserLoginDTO user) {
+    public FormatResponseData handleLogin(@Valid @RequestBody UserLoginDTO user) {
         if (user.getUsername() == null || user.getPassword() == null) {
             return new FormatResponseData<>(ResponseStatus.FAILURE, "请输入用户名或密码");
         }
