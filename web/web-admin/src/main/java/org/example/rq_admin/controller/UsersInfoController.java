@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import org.example.rq_admin.entity.DTO.UserLoginDTO;
 import org.example.rq_admin.entity.DTO.UserRegisterDTO;
 import org.example.rq_admin.entity.UserInfo;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.impl.UsersInfoServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -33,15 +32,15 @@ public class UsersInfoController {
     @PostMapping("/login")
     public FormatResponseData handleLogin(@Valid @RequestBody UserLoginDTO user) {
         if (user.getUsername() == null || user.getPassword() == null) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "请输入用户名或密码");
+            return FormatResponseData.error("请输入用户名或密码");
         }
 
         String token = usersInfoService.checkLoginInfo(user);
 
         if (Objects.equals(token, "")) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "请输入正确的用户名或密码");
+            return FormatResponseData.error("请输入正确的用户名或密码");
         } else {
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "登录成功", token);
+            return FormatResponseData.ok(token);
         }
     }
 
@@ -49,11 +48,11 @@ public class UsersInfoController {
     @PostMapping("/register")
     public FormatResponseData handleRegistry(@RequestBody UserRegisterDTO userRegisterDTO) {
         if (userRegisterDTO.getUsername().isEmpty()) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "用户名不能为空");
+            return FormatResponseData.error("用户名不能为空");
         }
 
         if (usersInfoService.checkUserExists(userRegisterDTO.getUsername())) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "用户名已经被注册");
+            return FormatResponseData.error("用户名已经被注册");
         }
 
         UserInfo userInfo = new UserInfo();
@@ -62,7 +61,7 @@ public class UsersInfoController {
 
         boolean save = usersInfoService.save(userInfo);
 
-        return new FormatResponseData<>(save ? ResponseStatus.SUCCESS : ResponseStatus.FAILURE);
+        return save ? FormatResponseData.ok() : FormatResponseData.error("注册失败");
     }
 
 

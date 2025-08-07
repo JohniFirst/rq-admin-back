@@ -3,7 +3,6 @@ package org.example.rq_admin.service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.slf4j.Logger;
@@ -43,14 +42,13 @@ public class FileUploadService {
     /**
      * 上传单个文件
      */
-    public FormatResponseData<FileUploadResponse> uploadFile(MultipartFile file) {
+    public FormatResponseData uploadFile(MultipartFile file) {
         if (file.isEmpty()) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不能为空");
+            return FormatResponseData.error("文件不能为空");
         }
 
         if (file.getSize() > maxFileSize) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE,
-                    "文件大小超过限制，最大允许 " + (maxFileSize / 1024 / 1024) + "MB");
+            return FormatResponseData.error("文件大小超过限制，最大允许 " + (maxFileSize / 1024 / 1024) + "MB");
         }
 
         try {
@@ -58,20 +56,20 @@ public class FileUploadService {
             FileInfo savedFileInfo = saveFileInfoToDatabase(result);
 
             FileUploadResponse response = buildUploadResponse(result, savedFileInfo);
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件上传成功", response);
+            return FormatResponseData.ok(response);
 
         } catch (IOException e) {
             logger.error("文件上传失败: {}", file.getOriginalFilename(), e);
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件上传失败: " + e.getMessage());
+            return FormatResponseData.error(e.getMessage());
         }
     }
 
     /**
      * 批量上传多个文件
      */
-    public FormatResponseData<List<FileUploadResponse>> uploadMultipleFiles(MultipartFile[] files) {
+    public FormatResponseData uploadMultipleFiles(MultipartFile[] files) {
         if (files == null || files.length == 0) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要上传的文件");
+            return FormatResponseData.error("请选择要上传的文件");
         }
 
         List<FileUploadResponse> responses = new ArrayList<>();
@@ -102,11 +100,10 @@ public class FileUploadService {
         }
 
         if (!errors.isEmpty()) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE,
-                    "部分文件上传失败: " + String.join("; ", errors), responses);
+            return FormatResponseData.error("部分文件上传失败: " + String.join("; ", errors), responses);
         }
 
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, "所有文件上传成功", responses);
+        return FormatResponseData.ok(responses);
     }
 
     /**
@@ -187,13 +184,13 @@ public class FileUploadService {
     @Getter
     public static class FileUploadResponse {
         private String id;
-//        上传的原始文件名
+        //        上传的原始文件名
         private String name;
-//        保存到服务器的文件名
+        //        保存到服务器的文件名
         private String filename;
-//        文件大小
+        //        文件大小
         private long fileSize;
-//        文件类型
+        //        文件类型
         private String fileType;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

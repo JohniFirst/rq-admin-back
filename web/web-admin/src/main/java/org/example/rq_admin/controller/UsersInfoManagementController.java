@@ -2,7 +2,6 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.UserInfo;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.impl.UsersInfoServiceImpl;
@@ -29,13 +28,13 @@ public class UsersInfoManagementController {
     public FormatResponseData<List<UserInfo>> userList() {
         List<UserInfo> list = usersInfoService.list();
 
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, list);
+        return FormatResponseData.ok(list);
     }
 
     @Operation(summary = "用户信息查询")
     @GetMapping
     public FormatResponseData<UserInfo> getUserInfoById(@RequestParam Long id) {
         UserInfo userInfo = usersInfoService.getById(id);
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, userInfo);
+        return FormatResponseData.ok(userInfo);
     }
 }

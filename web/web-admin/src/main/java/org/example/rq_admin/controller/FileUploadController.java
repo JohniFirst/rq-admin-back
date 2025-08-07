@@ -2,16 +2,15 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.example.rq_admin.config.PaginationConfig;
-import org.example.rq_admin.enums.IsEnabled;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
+import org.example.rq_admin.enums.IsEnabled;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.example.rq_admin.service.FileInfoService;
 import org.example.rq_admin.service.FileUploadService;
@@ -27,9 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Tag(name = "文件上传", description = "文件上传相关的接口，包括单文件上传、多文件上传、文件下载等功能")
@@ -210,13 +206,13 @@ public class FileUploadController {
             @ApiResponse(responseCode = "500", description = "服务器内部错误")
     })
     @DeleteMapping("/delete/{fileId}")
-    public FormatResponseData<ObjectUtils.Null> deleteFile(
+    public FormatResponseData deleteFile(
             @Parameter(description = "文件ID") @PathVariable String fileId) {
 
         try {
             Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
             if (fileInfo.isEmpty()) {
-                return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
+                return FormatResponseData.error("文件不存在");
             }
 
             // 删除物理文件
@@ -228,9 +224,9 @@ public class FileUploadController {
             // 删除数据库中的文件信息
             fileInfoService.deleteFileInfo(fileId);
 
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件删除成功");
+            return FormatResponseData.ok();
         } catch (IOException e) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件删除失败: " + e.getMessage());
+            return FormatResponseData.error(e.getMessage());
         }
     }
 
@@ -245,7 +241,7 @@ public class FileUploadController {
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize) {
 
         PaginationConfig<FileInfo> fileList = fileInfoService.findAll(pageNumber, pageSize);
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, fileList);
+        return FormatResponseData.ok(fileList);
     }
 
     @Operation(summary = "根据ID获取文件信息", description = "根据文件ID获取详细信息")
@@ -254,11 +250,11 @@ public class FileUploadController {
             @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @GetMapping("/info/{fileId}")
-    public FormatResponseData<FileInfo> getFileInfo(
+    public FormatResponseData<Optional<FileInfo>> getFileInfo(
             @Parameter(description = "文件ID") @PathVariable String fileId) {
 
         Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
-        return fileInfo.map(info -> new FormatResponseData<>(ResponseStatus.SUCCESS, info)).orElseGet(() -> new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在"));
+        return fileInfo.map(info -> FormatResponseData.ok(fileInfo)).orElseGet(() -> FormatResponseData.error("文件不存在"));
     }
 
     @Operation(summary = "更新文件状态", description = "启用或禁用文件")
@@ -267,7 +263,7 @@ public class FileUploadController {
             @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @PutMapping("/status/{fileId}")
-    public FormatResponseData<ObjectUtils.Null> updateFileStatus(
+    public FormatResponseData updateFileStatus(
             @Parameter(description = "文件ID") @PathVariable String fileId,
             @Parameter(description = "文件状态") @RequestParam IsEnabled isEnabled) {
 
@@ -280,7 +276,7 @@ public class FileUploadController {
             @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @PutMapping("/description/{fileId}")
-    public FormatResponseData<ObjectUtils.Null> updateFileDescription(
+    public FormatResponseData updateFileDescription(
             @Parameter(description = "文件ID") @PathVariable String fileId,
             @Parameter(description = "文件描述") @RequestParam String description) {
 
@@ -293,7 +289,7 @@ public class FileUploadController {
             @ApiResponse(responseCode = "404", description = "文件不存在")
     })
     @DeleteMapping("/info/{fileId}")
-    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(
+    public FormatResponseData deleteFileInfo(
             @Parameter(description = "文件ID") @PathVariable String fileId) {
 
         Optional<FileInfo> fileInfo = fileInfoService.findById(fileId);
@@ -311,7 +307,7 @@ public class FileUploadController {
             // 删除数据库记录
             return fileInfoService.deleteFileInfo(fileId);
         } else {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
+            return FormatResponseData.error("文件不存在");
         }
     }
 
@@ -321,11 +317,11 @@ public class FileUploadController {
             @ApiResponse(responseCode = "400", description = "参数错误")
     })
     @DeleteMapping("/batch")
-    public FormatResponseData<ObjectUtils.Null> batchDeleteFiles(
+    public FormatResponseData batchDeleteFiles(
             @Parameter(description = "文件ID列表") @RequestBody List<String> fileIds) {
 
         if (fileIds == null || fileIds.isEmpty()) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要删除的文件");
+            return FormatResponseData.error("请选择要删除的文件");
         }
 
         // 删除物理文件
@@ -359,9 +355,9 @@ public class FileUploadController {
             String result = String.format("上传路径: %s, 存在: %s, 是目录: %s",
                     absolutePath, exists, isDirectory);
 
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, result);
+            return FormatResponseData.ok(result);
         } catch (Exception e) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "测试失败: " + e.getMessage());
+            return FormatResponseData.error(e.getMessage());
         }
     }
 }

@@ -2,12 +2,11 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.DTO.UserLoginDTO;
 import org.example.rq_admin.event.CustomEvents;
 import org.example.rq_admin.event.CustomEvents1;
-import org.example.rq_admin.utils.EventPublisher;
 import org.example.rq_admin.response_format.FormatResponseData;
+import org.example.rq_admin.utils.EventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +30,7 @@ public class EventDrivenController {
 
         eventPublisher.publishEvent(customEvents);
 
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, "事件发布成功");
+        return FormatResponseData.ok();
     }
 
     @Operation(summary = "另外的一个事件", description = "消息监听是通过区分事件来实现的，一个服务可以同时监听多个事件，通过传递的参数来区分")
@@ -42,6 +41,6 @@ public class EventDrivenController {
 
         eventPublisher.publishEvent(customEvents1);
 
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, "事件发布成功");
+        return FormatResponseData.ok();
     }
 }

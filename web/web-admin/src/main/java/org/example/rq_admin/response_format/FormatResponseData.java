@@ -3,10 +3,12 @@ package org.example.rq_admin.response_format;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.rq_admin.enums.ResponseStatus;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FormatResponseData<T> {
     // 请求是否成功
@@ -16,25 +18,47 @@ public class FormatResponseData<T> {
     // 响应数据
     private T data;
 
-    public FormatResponseData(ResponseStatus status) {
-        this.code = status.getCode();
-        this.message = status.getMessage();
+    /**
+     * 响应成功的函数
+     */
+    public static <T> FormatResponseData<T> ok() {
+        FormatResponseData<T> R = new FormatResponseData<>();
+        R.setCode(ResponseStatus.SUCCESS.getCode());
+        R.setMessage(ResponseStatus.SUCCESS.getMessage());
+
+        return R;
     }
 
-    public FormatResponseData(ResponseStatus status, String message) {
-        this.code = status.getCode();
-        this.message = message;
+    /**
+     * 响应成功的函数
+     */
+    public static <T> FormatResponseData<T> ok(T data) {
+        FormatResponseData<T> R = new FormatResponseData<>();
+        R.setCode(ResponseStatus.SUCCESS.getCode());
+        R.setMessage(ResponseStatus.SUCCESS.getMessage());
+        R.setData(data);
+
+        return R;
     }
 
-    public FormatResponseData(ResponseStatus status, String message, T data) {
-        this.code = status.getCode();
-        this.message = message;
-        this.data = data;
+    /**
+     * 响应失败的函数
+     */
+    public static FormatResponseData error(String message) {
+        FormatResponseData<Object> R = new FormatResponseData<>();
+        R.setCode(ResponseStatus.FAILURE.getCode());
+        R.setMessage(message);
+        return R;
     }
 
-    public FormatResponseData(ResponseStatus status, T data) {
-        this.code = status.getCode();
-        this.message = status.getMessage();
-        this.data = data;
+    /**
+     * 响应失败的函数
+     */
+    public static <T> FormatResponseData<T> error(String message, T data) {
+        FormatResponseData<T> R = new FormatResponseData<>();
+        R.setCode(ResponseStatus.FAILURE.getCode());
+        R.setMessage(message);
+        R.setData(data);
+        return R;
     }
 }

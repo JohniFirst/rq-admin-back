@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +22,6 @@ public class ResponseByRequestData {
             @Parameter(description = "期待响应成功还是失败") @PathVariable("isSuccess") Boolean isSuccess
     ) {
         log.info("测试接口接收到了测试请求，此次请求{}", isSuccess.toString());
-        return new FormatResponseData<>(isSuccess ? ResponseStatus.SUCCESS : ResponseStatus.FAILURE);
+        return isSuccess ? FormatResponseData.ok() : FormatResponseData.error("请求失败");
     }
 }

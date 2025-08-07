@@ -1,10 +1,8 @@
 package org.example.rq_admin.service;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.example.rq_admin.config.PaginationConfig;
-import org.example.rq_admin.enums.IsEnabled;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.FileInfo;
+import org.example.rq_admin.enums.IsEnabled;
 import org.example.rq_admin.repository.FileInfoRepository;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.springframework.data.domain.Page;
@@ -65,8 +63,9 @@ public class FileInfoService {
 
     /**
      * 分页获取所有文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findAll(int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -84,8 +83,9 @@ public class FileInfoService {
 
     /**
      * 根据上传用户ID分页获取文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByUploadUserId(Long uploadUserId, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -103,8 +103,9 @@ public class FileInfoService {
 
     /**
      * 根据文件类型分页获取文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByFileType(String fileType, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -122,8 +123,9 @@ public class FileInfoService {
 
     /**
      * 根据状态分页获取文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByIsEnabled(IsEnabled isEnabled, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -141,8 +143,9 @@ public class FileInfoService {
 
     /**
      * 根据上传时间范围分页获取文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByUploadTimeBetween(LocalDateTime startTime, LocalDateTime endTime, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -160,8 +163,9 @@ public class FileInfoService {
 
     /**
      * 根据原始文件名模糊查询并分页
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByOriginalFilenameContaining(String originalFilename, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
@@ -172,12 +176,13 @@ public class FileInfoService {
 
     /**
      * 根据多个条件查询文件信息
+     *
      * @param pageNumber 页码（从1开始）
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      */
     public PaginationConfig<FileInfo> findByConditions(Long uploadUserId, String fileType, IsEnabled isEnabled,
-                                           LocalDateTime startTime, LocalDateTime endTime,
-                                           String originalFilename, int pageNumber, int pageSize) {
+                                                       LocalDateTime startTime, LocalDateTime endTime,
+                                                       String originalFilename, int pageNumber, int pageSize) {
         int springPageNumber = PaginationConfig.convertToSpringPageNumber(pageNumber);
         Pageable pageable = PageRequest.of(springPageNumber, pageSize, Sort.by("uploadTime").descending());
         Page<FileInfo> page = fileInfoRepository.findByConditions(uploadUserId, fileType, isEnabled,
@@ -198,56 +203,56 @@ public class FileInfoService {
     /**
      * 更新文件状态
      */
-    public FormatResponseData<ObjectUtils.Null> updateFileStatus(String fileId, IsEnabled isEnabled) {
+    public FormatResponseData updateFileStatus(String fileId, IsEnabled isEnabled) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
             fileInfo.setIsEnabled(isEnabled);
             fileInfoRepository.save(fileInfo);
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件状态更新成功");
+            return FormatResponseData.ok();
         } else {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
+            return FormatResponseData.error("文件不存在");
         }
     }
 
     /**
      * 更新文件描述
      */
-    public FormatResponseData<ObjectUtils.Null> updateFileDescription(String fileId, String description) {
+    public FormatResponseData updateFileDescription(String fileId, String description) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             FileInfo fileInfo = optionalFileInfo.get();
             fileInfo.setDescription(description);
             fileInfoRepository.save(fileInfo);
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件描述更新成功");
+            return FormatResponseData.ok();
         } else {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
+            return FormatResponseData.error("文件不存在");
         }
     }
 
     /**
      * 删除文件信息
      */
-    public FormatResponseData<ObjectUtils.Null> deleteFileInfo(String fileId) {
+    public FormatResponseData deleteFileInfo(String fileId) {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(fileId);
         if (optionalFileInfo.isPresent()) {
             fileInfoRepository.deleteById(fileId);
-            return new FormatResponseData<>(ResponseStatus.SUCCESS, "文件信息删除成功");
+            return FormatResponseData.ok();
         } else {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "文件不存在");
+            return FormatResponseData.error("文件不存在");
         }
     }
 
     /**
      * 批量删除文件信息
      */
-    public FormatResponseData<ObjectUtils.Null> deleteFileInfos(List<String> fileIds) {
+    public FormatResponseData deleteFileInfos(List<String> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
-            return new FormatResponseData<>(ResponseStatus.FAILURE, "请选择要删除的文件");
+            return FormatResponseData.error("请选择要删除的文件");
         }
 
         fileInfoRepository.deleteAllById(fileIds);
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, "批量删除成功");
+        return FormatResponseData.ok();
     }
 
     /**

@@ -2,7 +2,6 @@ package org.example.rq_admin.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.rq_admin.enums.ResponseStatus;
 import org.example.rq_admin.entity.DTO.MenuDTO;
 import org.example.rq_admin.entity.Menu;
 import org.example.rq_admin.response_format.FormatResponseData;
@@ -23,9 +22,9 @@ public class MenuController {
 
     @Operation(summary = "菜单列表", description = "获取当前用户菜单")
     @GetMapping("/menu/list")
-    private FormatResponseData<List<MenuDTO>>  getAllMenus(@RequestParam(required = false) MenuDTO menu) {
+    private FormatResponseData<List<MenuDTO>> getAllMenus(@RequestParam(required = false) MenuDTO menu) {
         List<MenuDTO> list = menuService.getMenusWithRolesDTO();
-        return new FormatResponseData<>(ResponseStatus.SUCCESS, list);
+        return FormatResponseData.ok(list);
     }
 
     @Operation(summary = "所有菜单列表", description = "获取系统所有菜单")
