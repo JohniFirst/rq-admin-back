@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.rq_admin.config.BizException;
 import org.example.rq_admin.enums.ResponseStatus;
 
 @Data
@@ -60,5 +61,15 @@ public class FormatResponseData<T> {
         R.setMessage(message);
         R.setData(data);
         return R;
+    }
+
+    /**
+     * 响应失败
+     */
+    public static FormatResponseData error(BizException bizException) {
+        FormatResponseData r = new FormatResponseData();
+        r.setCode(bizException.getCode());
+        r.setMessage(bizException.getMessage());
+        return r;
     }
 }
