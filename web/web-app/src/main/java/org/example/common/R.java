@@ -49,6 +49,17 @@ public class R<T> {
     /**
      * 响应失败
      */
+    public static <T> R<T> error(String message, T data) {
+        R<T> r = new R<>();
+        r.setCode(201);
+        r.setMessage(message);
+        r.setData(data);
+        return r;
+    }
+
+    /**
+     * 响应失败
+     */
     public static R error(BizException bizException) {
         R r = new R();
         r.setCode(bizException.getCode());

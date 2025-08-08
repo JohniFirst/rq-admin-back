@@ -1,8 +1,11 @@
 package org.example.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.example.common.R;
+import org.example.entity.UserInfo;
 import org.example.exception.BizException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,5 +22,10 @@ public class HelloApp {
         }
 
         return R.success("Hello World" + name);
+    }
+
+    @GetMapping("/validate")
+    public R<UserInfo> validate(@Valid UserInfo userInfo) {
+        return R.success(userInfo);
     }
 }
