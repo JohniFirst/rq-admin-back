@@ -31,10 +31,6 @@ public class UsersInfoController {
     @Operation(summary = "登录")
     @PostMapping("/login")
     public FormatResponseData handleLogin(@Valid @RequestBody UserLoginDTO user) {
-        if (user.getUsername() == null || user.getPassword() == null) {
-            return FormatResponseData.error("请输入用户名或密码");
-        }
-
         String token = usersInfoService.checkLoginInfo(user);
 
         if (Objects.equals(token, "")) {
@@ -46,11 +42,7 @@ public class UsersInfoController {
 
     @Operation(summary = "注册")
     @PostMapping("/register")
-    public FormatResponseData handleRegistry(@RequestBody UserRegisterDTO userRegisterDTO) {
-        if (userRegisterDTO.getUsername().isEmpty()) {
-            return FormatResponseData.error("用户名不能为空");
-        }
-
+    public FormatResponseData handleRegistry(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         if (usersInfoService.checkUserExists(userRegisterDTO.getUsername())) {
             return FormatResponseData.error("用户名已经被注册");
         }
@@ -63,6 +55,4 @@ public class UsersInfoController {
 
         return save ? FormatResponseData.ok() : FormatResponseData.error("注册失败");
     }
-
-
 }
