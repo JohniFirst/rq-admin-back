@@ -1,16 +1,19 @@
 package org.example.rq_admin.advice;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.example.rq_admin.config.BizException;
 import org.example.rq_admin.response_format.FormatResponseData;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-//@RestControllerAdvice
+@Hidden // 解决knife4j文档显示异常的问题
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
