@@ -1,6 +1,5 @@
 package org.example.rq_admin.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +32,6 @@ public class FileInfo {
     @Column(name = "file_type")
     private String fileType;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "upload_time", nullable = false)
     private LocalDateTime uploadTime;
 
@@ -47,11 +45,9 @@ public class FileInfo {
     @Column(name = "is_enabled", nullable = false)
     private IsEnabled isEnabled = IsEnabled.ENABLED;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time", nullable = false)
     private LocalDateTime createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 

@@ -17,6 +17,8 @@ spring:
     cache: false
   profiles:
     active: dev
+  jackson:
+    date-format: 'yyyy-MM-dd HH:mm:ss'
 
 # 文件上传配置
 file:
@@ -61,7 +63,6 @@ knife4j:
 mybatis-plus:
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
-
 
 
 application:

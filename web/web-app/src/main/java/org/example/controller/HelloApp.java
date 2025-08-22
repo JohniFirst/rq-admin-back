@@ -5,14 +5,22 @@ import jakarta.validation.Valid;
 import org.example.common.R;
 import org.example.entity.UserInfo;
 import org.example.exception.BizException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/auth")
 public class HelloApp {
+
+    @GetMapping("/params")
+    public String handleParams(@RequestParam("username") List<Integer> username) {
+        System.out.println(username);
+        for (Integer number : username) {
+            System.out.println(number);
+        }
+        return username.toString();
+    }
 
     @Operation(summary = "hello", description = "你好，世界")
     @RequestMapping(value = "/hello", method = RequestMethod.GET)

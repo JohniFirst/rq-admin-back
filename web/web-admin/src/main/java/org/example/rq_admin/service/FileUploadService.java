@@ -1,6 +1,5 @@
 package org.example.rq_admin.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.rq_admin.entity.FileInfo;
@@ -193,7 +192,6 @@ public class FileUploadService {
         //        文件类型
         private String fileType;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime uploadTime;
     }
 } 
