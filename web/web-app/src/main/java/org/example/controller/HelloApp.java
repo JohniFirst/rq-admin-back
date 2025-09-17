@@ -32,8 +32,8 @@ public class HelloApp {
         return R.success("Hello World" + name);
     }
 
-    @GetMapping("/validate")
-    public R<UserInfo> validate(@Valid UserInfo userInfo) {
+    @PostMapping("/validate")
+    public R<UserInfo> validate(@Valid @RequestBody UserInfo userInfo) {
         return R.success(userInfo);
     }
 }

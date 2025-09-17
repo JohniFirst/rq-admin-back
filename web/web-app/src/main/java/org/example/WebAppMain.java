@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class WebAppMain {
     public static void main(String[] args) {
         SpringApplication.run(WebAppMain.class, args);
 
-        System.out.println("Application is running on http://localhost:8999");
+        System.out.println("Application is running on http://localhost:8080");
     }
 }
