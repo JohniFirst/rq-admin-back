@@ -15,8 +15,8 @@ spring:
       max-request-size: 100MB
   thymeleaf:
     cache: false
-  profiles:
-    active: dev
+  # profiles:
+  #   active: dev
   jackson:
     date-format: 'yyyy-MM-dd HH:mm:ss'
 
